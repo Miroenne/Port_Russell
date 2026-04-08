@@ -1,15 +1,5 @@
 const Catway = require('../models/catway');
 
-exports.getAll = async (req, res, next) => {
-    try{
-        const catways = await Catway.find();
-        res.locals.catways = catways;
-        next();
-    }catch(error){
-      next(error);  
-    };
-}
-
 exports.create = async (req, res) => {
     const tempCatway =({
         catwayNumber : req.body.catwayNumber,
@@ -19,7 +9,7 @@ exports.create = async (req, res) => {
 
     try{
         let catway = await Catway.create(tempCatway);
-        res.redirect('/confirm?objectName=Catway&redirect=/catways');
+        res.status(200).json(catway);
     }catch(error){
         console.error("Erreur create catway: ", error);
 
@@ -30,5 +20,61 @@ exports.create = async (req, res) => {
             errorMessage : error.message,
             errors : error.errors
         });
+    }
+}
+
+exports.getAll = async (req, res, next) => {
+    try{
+        const catways = await Catway.find();
+        return res.status(200).json(catways);        
+    }catch(error){
+        return res.status(501).json(error);
+    };
+}
+
+exports.getOne = async (req, res, next) => {
+    const id = req.params.id;
+
+    try{
+        let catway = await Catway.findOne({catwayNumber: id});
+
+        if(catway){
+            return res.status(200).json(catway);
+        }
+
+        return res.status(404).json('catway_not_find');
+    }catch(error){
+        return res.status(501).json(error);
+    }
+}
+
+exports.update = async (req, res, next) => {
+    const id = req.params.id;
+    const tempState = req.body.catwayState;
+
+    try{
+        let catway = await Catway.findOne({catwayNumber : id});
+
+        if(catway){
+            if(!! tempState){
+                catway.catwayState = tempState;
+            }
+            await catway.save();
+            return res.status(201).json(catway);
+        }
+        return res.status(404).json({message : 'Catway_Not_Found'});
+    }catch(error){
+        res.status(501).json(error);
+    }
+}
+
+exports.delete = async (req, res, next) => {
+    const id = req.params.id;
+
+    try{
+        await Catway.deleteOne({catwayNumber :  id});
+        return res.sendStatus(204);
+    }catch(error){
+        res.status(501).json(error);
     }
 }

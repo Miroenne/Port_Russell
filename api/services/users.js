@@ -38,7 +38,7 @@ exports.getAll = async (req, res, next) => {
     }
 }
 
-exports.getByEmail = async (req, res, next) => {
+exports.getOne = async (req, res, next) => {
     const email = req.params.email;
 
     try{
@@ -85,7 +85,7 @@ exports.delete = async (req, res, next) => {
 
     try{
         await User.deleteOne({email : email});
-        return res.status(204);
+        return res.sendStatus(204);
     }catch(error){
         res.status(501).json(error);
     }
