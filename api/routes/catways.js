@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 
 const service = require('../services/catways');
+const reservationsRouter = require('./reservations');
+
+router.use('/:id/reservations', reservationsRouter);
 
 /* Create a new catway in the database */
 router.post('/', service.create);

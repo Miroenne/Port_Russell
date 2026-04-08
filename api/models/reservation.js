@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 /* Reservation's schema for the needed fields to create a reservation and save it in the database */
 const Reservation = new Schema({
     catwayNumber:{
-        type: Number,
+        type: String,
         required: [true, 'Le numéro du catway est requis']
     },
     clientName:{
