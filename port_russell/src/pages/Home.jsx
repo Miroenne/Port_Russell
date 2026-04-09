@@ -1,6 +1,32 @@
-
+import {useEffect, useState} from 'react';
 
 const Home = () => {
+
+    const [allReservations, setAllReservations] = useState([]);
+    
+    useEffect(() => {
+        const fetchEverything = async () => {
+            try{
+                const resReservations = await fetch('http://localhost:3000/catways/');
+                const catways = await resReservations.json();
+
+                const reservationPromises = catways.map(catway => 
+                    fetch('http://localhost:3000/catways/${catway.catwayNumber}/reservations/')
+                    .then(res => res.json())
+                );
+
+                const results = await Promise.all(reservationPromises);
+                const flatReservations = results.flat();
+
+                setAllReservations(flatReservations);
+            }catch(error){
+                console.error('error_while_group_loading', error);
+            }
+        };
+        
+        fetchEverything();
+    }, []);
+        
 
     return(
         <main>
@@ -21,13 +47,15 @@ const Home = () => {
                     </tr>                    
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>3</td>
-                        <th>Jack Sparrow</th>
-                        <td>Black Pearl</td>
-                        <td>01/10/2025</td>
-                        <td>01/10/2026</td>
-                    </tr>
+                    {allReservations.map(reservation => (
+                        <tr key={reservation.catwayNumber}>
+                            <td>{reservation.catwayNumber}</td>
+                            <td>{reservation.clientName}</td>
+                            <td>{reservation.boatName}</td>
+                            <td>{reservation.startDate}</td>
+                            <td>{reservation.endDate}</td>
+                        </tr>
+                    ))}
                 </tbody>
                 <tfoot>
                     <tr>

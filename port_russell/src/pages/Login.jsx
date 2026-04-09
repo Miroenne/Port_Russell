@@ -1,8 +1,10 @@
-import '../style/bootstrap.min.css';
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
+
 
 function Login() {
+    
     const [email, setEmail] = useState("");
     const[password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -16,14 +18,12 @@ function Login() {
             body: JSON.stringify({email, password})
         });
 
-        const data = await response.json();
-
         if (response.status === 200){
             navigate('/Home');
         }else{
             alert('Identifiant ou mot de passe incorrect');
         }
-    }
+    };
 
 
     return(
@@ -46,11 +46,13 @@ function Login() {
                     <div class="col-4 mx-auto">
                         <button type="submit" class="btn btn-primary mb-3">Connexion</button>
                     </div>
+                    <div class="container pt-3 text-end">
+                        <NavLink id='readme' to='Readme'>Docs</NavLink>
+                    </div>
                 </form>
+                
             </div>
-            <div class="container pt-3 text-end">
-                <a class="align-self-end" target="_blank" href="/readme">Lire la documentation de l'application</a>
-            </div>
+            
         </main>
     );
 }
