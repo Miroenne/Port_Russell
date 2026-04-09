@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import {NavLink} from 'react-router-dom';
 
 
-function Login() {
+const Login = () => {
     
     const [email, setEmail] = useState("");
     const[password, setPassword] = useState("");
@@ -15,6 +15,7 @@ function Login() {
         const response = await fetch('http://localhost:3000/users/login',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
             body: JSON.stringify({email, password})
         });
 

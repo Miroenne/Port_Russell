@@ -15,7 +15,16 @@ const app = express();
 
 app.use(cors({
     exposedHeaders: ["Authorization"],
-    origin : '*'
+    origin : (origin, callback) => {
+        const localRegex = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/;
+
+        if(!origin || localRegex.test(origin)){
+            return callback(null, true);
+        }
+
+        return callback(new Error('Origin non authorisée par CORS'));
+    },
+    credentials: true
 }));
 
 app.use(logger('dev'));

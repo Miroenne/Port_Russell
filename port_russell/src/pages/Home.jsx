@@ -30,7 +30,8 @@ const Home = () => {
 
     return(
         <main>
-            <div class="container-fluid row py-2 justify-content-evenly">           
+        <div class="container-fluid row py-2 justify-content-evenly">
+                       
         </div> 
         <div class="container-fluid row mt-5 p-2 text-center justify-content-center">
             <table class="mx-auto">
