@@ -8,10 +8,10 @@ router.post('/', service.create);
 /* Get all the reservations's informations */
 router.get('/', service.getAll);
 /* Get a specific reservation from his reservation id*/
-router.get('/:id', service.getOne);
+router.get('/:idReservation', service.getOne);
 /* Update a specific reservation from his reservation id */
-router.put('/:id', service.update);
+router.put('/:idReservation', service.update);
 /* Delete a specific reservation from his reservation id */
-router.delete('/:id', service.delete);
+router.delete('/:idReservation', service.delete);
 
 module.exports = router;

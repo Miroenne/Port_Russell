@@ -19,7 +19,10 @@ const Login = () => {
             body: JSON.stringify({email, password})
         });
 
+        const data = await response.json();
+
         if (response.status === 200){
+            sessionStorage.setItem('user', JSON.stringify(data.user));
             navigate('/Home');
         }else{
             alert('Identifiant ou mot de passe incorrect');

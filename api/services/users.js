@@ -119,11 +119,17 @@ exports.login = async (req, res, next) => {
                     {
                         httpOnly : true,
                         sameSite : 'strict'
-                    });
+                    });                    
 
                     console.log('User logged successfully');
 
-                    return res.status(200).json('authenticate_succeed');
+                    return res.status(200).json({
+                        message: 'authenticate_succeed',
+                        user: {
+                            userName: user.userName,
+                            email: user.email
+                        }
+                    });
                 }
                 
                 return res.status(403).json('wrong_credentials');
@@ -132,7 +138,7 @@ exports.login = async (req, res, next) => {
             return res.status(404).json({ message : 'utilisateur non trouvé'});
         }
     }catch(error){
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 

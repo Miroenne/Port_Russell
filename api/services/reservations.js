@@ -1,12 +1,23 @@
 const Reservation = require('../models/reservation');
 
 exports.create = async (req, res) => {
+
+    const startDate = new Date(req.body.startDate);
+    const endDate = new Date(req.body.endDate);
+
+    if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    return res.status(400).json({ message: 'Format de date invalide' });
+    }
+
+    if (endDate < startDate) {
+    return res.status(400).json({ message: 'La date de fin doit etre posterieure ou egale a la date de debut' });
+    }
     const tempReservation =({
         catwayNumber : req.body.catwayNumber,
         clientName : req.body.clientName,
         boatName : req.body.boatName,
-        startDate : req.body.startDate,
-        endDate : req.body.endDate
+        startDate,
+        endDate
     });
 
     try{

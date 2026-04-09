@@ -23,12 +23,7 @@ const User = new Schema({
         trim : true,
         /* Setting the password to have a minimum length of 8 characters */
         minlength: [8, 'Le mot de passe doit contenir au moins 8 caractères']
-    },
-    /*accessLevel: {
-        type: Number,
-        enum : {values : [0, 1], message : "Le niveau d'accès doit être 0 pour un administrateur ou 1 pour un utilisateur standard"},
-        required: [true, "Le niveau d'accès est requis"]
-    }*/
+    }    
 
 }, {
     /* Adding the fields createdAt and updatedAt in the database */

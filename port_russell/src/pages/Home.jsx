@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import HomeCard from '../components/HomeCard';
 
 const Home = () => {
 
@@ -29,10 +30,8 @@ const Home = () => {
         
 
     return(
-        <main>
-        <div class="container-fluid row py-2 justify-content-evenly">
-                       
-        </div> 
+        <main>        
+            <HomeCard/>        
         <div class="container-fluid row mt-5 p-2 text-center justify-content-center">
             <table class="mx-auto">
                 <caption class="text-decoration-underline">
