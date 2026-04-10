@@ -1,4 +1,5 @@
 import {NavLink} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import '../style/bootstrap.min.css';
 import '../style/style.css';
 
@@ -10,6 +11,22 @@ const MyLink = (props) => {
 
 const Nav = () => {
 
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {    
+    try{
+        await fetch('http://localhost:3000/users/logout', {
+            method: "GET",
+            credentials: 'include'
+        });
+        
+        sessionStorage.removeItem('user');
+
+        navigate('/');
+    }catch(error){
+        console.error('error_during_logout', error);
+    }
+}
     return(
         <header>
             <nav className="navbar navbar-expand-lg bg-body-tertiary fs-5" id='nav' data-bs-theme="light">
@@ -34,10 +51,13 @@ const Nav = () => {
                                     <MyLink label="Catways" path="Achievements"/>
                                 </li>
                                 <li className="nav-item">
-                                    <MyLink label="Utilisateurs" path="Contact"/>
+                                    <MyLink label="Utilisateurs" path="Users"/>
                                 </li>
                                 <li className="nav-item">
                                     <MyLink label="Docs" path="Readme"/>
+                                </li>
+                                <li className='nav-item'>
+                                    <button className="logout-btn" type='button' onClick={handleLogout}>Déconnexion</button>
                                 </li>
                             </ul>
                         </div>

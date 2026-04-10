@@ -25,16 +25,16 @@ const HomeCard = () => {
             </div>
             <div class="card-body row text-center">
                 <div className='col-6'>
-                    <img src={userIcon} className='homeCardIcon' alt="user icon"/>
+                    <img src={userIcon} className='cardIcon' alt="user icon"/>
                     <p class="card-title">{user ? user.userName : 'Utilisateur inconnu'}</p>
                 </div>                    
                 <div className='col-6'>
-                    <img src={emailIcon} className='homeCardIcon' alt="email icon" />
+                    <img src={emailIcon} className='cardIcon' alt="email icon" />
                     <p class="card-text">{user ? user.email : ''} </p>
                 </div>           
             </div>
             <div className="card-footer">
-                <img src={calendarIcon} className='homeCardIcon' alt="calendar icon" />
+                <img src={calendarIcon} className='cardIcon' alt="calendar icon" />
                 <p className='text-capitalize'>{date}</p>
             </div>
         </div> 

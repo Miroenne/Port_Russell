@@ -21,7 +21,7 @@ const Home = () => {
 
                 setAllReservations(flatReservations);
             }catch(error){
-                console.error('error_while_group_loading', error);
+                console.error('error_during_group_load', error);
             }
         };
         

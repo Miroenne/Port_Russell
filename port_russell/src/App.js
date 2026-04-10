@@ -1,6 +1,8 @@
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Readme from './pages/Readme';
+import Users from './pages/Users';
+import Confirm from './pages/Confirm';
 import AuthLayout from './pages/AuthLayout';
 import MainLayout from './pages/MainLayout';
 /*import Services from './pages/Services';
@@ -20,11 +22,12 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path="/" element={<Login/>}/>
           <Route path='/Readme' element={<Readme/>}/>
+          <Route path='/Confirm' element={<Confirm/>}/>
         </Route> 
         <Route element={<MainLayout />}>
           <Route path='/home' element={<Home/>}/>
-          {/*<Route path="/Services" element={<Services/>}/>
-          <Route path="/Achievements" element={<Achievements/>}/>
+          <Route path="/users" element={<Users/>}/>
+         {/* <Route path="/Achievements" element={<Achievements/>}/>
           <Route path="/Contact" element={<Contact/>}/>
           <Route path="/Mentions" element={<Mentions/>}/>*/}
         </Route>       
