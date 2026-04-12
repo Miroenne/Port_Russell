@@ -1,25 +1,30 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import HomeCard from '../components/HomeCard';
 
 const Home = () => {
 
     const [allReservations, setAllReservations] = useState([]);
+    const hasFetchedRef = useRef(false);
     
     useEffect(() => {
+
+        if (hasFetchedRef.current) return;
+        hasFetchedRef.current = true;
+
         const fetchEverything = async () => {
             try{
                 const resReservations = await fetch('http://localhost:3000/catways/');
                 const catways = await resReservations.json();
 
                 const reservationPromises = catways.map(catway => 
-                    fetch('http://localhost:3000/catways/${catway.catwayNumber}/reservations/')
+                    fetch(`http://localhost:3000/catways/${catway.catwayNumber}/reservations/`)
                     .then(res => res.json())
                 );
 
                 const results = await Promise.all(reservationPromises);
                 const flatReservations = results.flat();
 
-                setAllReservations(flatReservations);
+                setAllReservations(flatReservations);                
             }catch(error){
                 console.error('error_during_group_load', error);
             }

@@ -37,6 +37,7 @@ exports.create = async (req, res) => {
 }
 
 exports.getAll = async (req, res, next) => {
+    
     try{
         const reservations = await Reservation.find();
         return res.status(200).json(reservations);        

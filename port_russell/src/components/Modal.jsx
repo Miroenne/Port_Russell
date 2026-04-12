@@ -1,4 +1,3 @@
-import { Navigate } from 'react-router-dom';
 import '../style/bootstrap.min.css';
 import '../style/style.css';
 import {useEffect, useState} from 'react';
@@ -25,18 +24,18 @@ const Modal = (props) => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try{
             const response = await fetch(props.action, {
                 method: props.method,
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                
+                body: new URLSearchParams(formData)
             });
 
-            if(response.status === 200){
-                navigate('/Confirm');
+            if(response.status === 200){                
+                navigate('/Confirm');               
             }
         }catch(error){
             console.error('error_during_form_submission', error);
@@ -59,7 +58,7 @@ const Modal = (props) => {
 
 
             {/*Adding Modal */}
-            <div className="modal fade" id={props.modalId} tabIndex="-1" aria-labelledby={props.modalId + "Label"} aria-hidden="true">
+            <div className="fade modal " id={props.modalId} name='myModal' tabIndex="-1" aria-labelledby={props.modalId + "Label"} aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
