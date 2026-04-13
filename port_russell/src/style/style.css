@@ -36,11 +36,20 @@ li{
   position:relative;
   border:none;
   padding: 0;
-  top: 12%;
-  margin-left:10px;
+  top: 8%;
+  margin-left:20px;
   font-weight: light;
   font-size: small;
   text-transform: uppercase;
+}
+.min-h-200{
+  min-height: 200px;
+}
+.ms-4_5{
+  margin-left: 4.5%;
+}
+.border-top-3{
+  border-top: 2px solid rgba(0, 0, 0, 0.5);
 }
 
 /* ID */

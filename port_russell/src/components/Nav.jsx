@@ -45,16 +45,16 @@ const Nav = () => {
                                     <MyLink label="Home" path="Home"/>
                                 </li>
                                 <li className="nav-item">
-                                    <MyLink label="Reservation" path="Services"/>
+                                    <MyLink label="Reservation" path="Reservations"/>
                                 </li>
                                 <li className="nav-item">                                    
-                                    <MyLink label="Catways" path="Achievements"/>
+                                    <MyLink label="Catways" path="Catways"/>
                                 </li>
                                 <li className="nav-item">
                                     <MyLink label="Utilisateurs" path="Users"/>
                                 </li>
                                 <li className="nav-item">
-                                    <MyLink label="Docs" path="Readme"/>
+                                    <MyLink label="Docs" target="_blank" rel="noopener noreferrer" path="Readme"/>
                                 </li>
                                 <li className='nav-item'>
                                     <button className="logout-btn" type='button' onClick={handleLogout}>Déconnexion</button>

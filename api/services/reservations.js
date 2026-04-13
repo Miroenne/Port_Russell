@@ -39,7 +39,7 @@ exports.create = async (req, res) => {
 exports.getAll = async (req, res, next) => {
     
     try{
-        const reservations = await Reservation.find();
+        const reservations = await Reservation.find();        
         return res.status(200).json(reservations);        
     }catch(error){
         return res.status(501).json(error);
@@ -63,6 +63,7 @@ exports.getOne = async (req, res, next) => {
 }
 
 exports.update = async (req, res, next) => {
+    const catwayNumber = req.params.id;
     const idReservation = req.params.idReservation;
     const temp = ({
         catwayNumber : req.body.catwayNumber,
@@ -73,8 +74,13 @@ exports.update = async (req, res, next) => {
     })
 
     try{
-        let reservation = await Reservation.findOne({id : idReservation});
-
+        const reservation = await Reservation.findOne(            
+        {
+            _id : idReservation,
+            catwayNumber : catwayNumber
+        } 
+        );
+        console.log('Reservation found for update:', reservation);
         if(reservation){
             Object.keys(temp).forEach(key =>{
                 if(!! temp){
@@ -91,11 +97,18 @@ exports.update = async (req, res, next) => {
     }
 }
 
-exports.delete = async (req, res, next) => {
+exports.delete = async (req, res) => {
+    const catwayNumber = req.params.id;
     const idReservation = req.params.idReservation;
 
     try{
-        await Reservation.deleteOne({id :  idReservation});
+        const result = await Reservation.deleteOne({
+            catwayNumber : catwayNumber,
+             _id : idReservation
+        });
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Reservation not found' });
+        }        
         return res.sendStatus(204);
     }catch(error){
         res.status(501).json(error);

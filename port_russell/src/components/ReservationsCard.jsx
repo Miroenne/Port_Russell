@@ -5,7 +5,7 @@ import { data, useLocation } from 'react-router-dom';
 import {useState, useEffect, use} from 'react';
 
 
-const DisplayCard = (props) => {   
+const ReservationsCard = (props) => {   
     
     const location = useLocation();
     const [reservationId, setReservationId] = useState(null);
@@ -19,31 +19,29 @@ const DisplayCard = (props) => {
         console.log('Reservation ID set to:', props.idReservation);
     }}, [location.pathname, props.idReservation]);
     
-    if(location.pathname.toLowerCase().includes('users')){
-        modalId =  `editUserModal-${props.text2}`;
-        pathname = "http://localhost:3000/Users/" + props.text2;
+    /*if(location.pathname.toLowerCase().includes('users')){
+        modalId = 'editUserModal';
+        pathname = location.pathname + props.text2;
         
-        fields = [
-            { name: 'userName', label: 'Nom', type: 'text', value: props.text1 },
-            { name: 'email', label: 'Email', type: 'email', value: props.text2 },
-            { name: 'password', label: 'Mot de passe', type: 'password' }
-        ];
-
+        
     }else if(location.pathname.toLowerCase().includes(`reservations`)){
-        modalId = `editReservationModal-${props.idReservation}`;
-        pathname = "http://localhost:3000/catways/" + props.text1 + "/reservations/" + props.idReservation;
+        modalId = `updateReservations`;
 
-        fields = [
+        const reservationFields = [
             { name: 'catwayNumber', label: 'Numéro de catway', type: 'text', value: props.text1 },
             { name: 'clientName', label: 'Nom du client', type: 'text', value: props.text2 },
             { name: 'boatName', label: 'Nom du bâteau', type: 'text', value: props.text3 },
             { name: 'startDate', label: 'Début de réservation', type: 'date', value: props.text4 },
             { name: 'endDate', label: 'Fin de réservation', type: 'date', value: props.text5 }
         ];
-        console.log(pathname);
-    };
+        fields = reservationFields;
+    }; */
     
-    
+    const userFields = [
+            { name: 'userName', label: 'Nom', type: 'text', value: props.text1 },
+            { name: 'email', label: 'Email', type: 'email', value: props.text2 },
+            { name: 'password', label: 'Mot de passe', type: 'password' }
+        ];
 
     return(
        <div className="card shadow-lg min-h-200 mx-auto border-2 mt-5" id='userCard'>            
@@ -69,10 +67,10 @@ const DisplayCard = (props) => {
                         <img src={props.icon4} className={props.secondRowIcon} alt={props.iconAlt4} />
                     </div>                    
                     <div className={props.col2}>                            
-                        <p className="card-text">Du : <span>{props.text4}</span></p>
+                        <p className="card-text">{props.text4}</p>
                     </div> 
                     <div className={props.col2}>                            
-                        <p className="card-text">Au : <span>{props.text5}</span></p>
+                        <p className="card-text">{props.text5}</p>
                     </div>                     
                 </div>        
             </div>
@@ -82,9 +80,9 @@ const DisplayCard = (props) => {
                     textPosition= "text-center row justify-content-evenly"
                     title = "Modifier"
                     margin = ""
-                    action = {pathname}
+                    action = ""
                     method = "PUT"
-                    fields = {fields}
+                    fields = {userFields}
                     noDisplay = "" 
                     user = {props.text2}
                     idReservation = {props.idReservation}
@@ -96,4 +94,4 @@ const DisplayCard = (props) => {
     
 }
 
-export default DisplayCard;
+export default ReservationsCard;

@@ -2,6 +2,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Readme from './pages/Readme';
 import Users from './pages/Users';
+import Reservations from './pages/Reservations';
+import Catways from './pages/Catways';
 import Confirm from './pages/Confirm';
 import AuthLayout from './pages/AuthLayout';
 import MainLayout from './pages/MainLayout';
@@ -31,9 +33,9 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path='/home' element={ProtectedRoute({ children: <Home />, isAuthenticated })}/>
           <Route path="/users" element={ProtectedRoute({ children: <Users />, isAuthenticated })}/>
-         {/* <Route path="/Achievements" element={<Achievements/>}/>
-          <Route path="/Contact" element={<Contact/>}/>
-          <Route path="/Mentions" element={<Mentions/>}/>*/}
+          <Route path="/reservations" element={ProtectedRoute({ children: <Reservations />, isAuthenticated })}/>
+          <Route path="/catways" element={ProtectedRoute({ children: <Catways />, isAuthenticated })}/>        
+          
         </Route>       
         
       </Routes>

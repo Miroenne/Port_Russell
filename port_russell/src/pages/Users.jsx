@@ -19,7 +19,12 @@ const Users = () => {
                 const data = await resUsers.json();
                 
                     if(Array.isArray(data)) {
-                        setUsers(data);                                                                  
+                        const sortedData = [...data].sort((a,b) => {
+                            if(a.email.includes('@portrussell.com')) return -1;
+                            if(b.email.includes('@portrussell.com')) return 1;
+                            return 0;
+                        });
+                        setUsers(sortedData);                                                                  
                     }else{
                         console.error("La route /users n'a pas renvoyé un tableau", data);
                         setUsers([]);
@@ -48,29 +53,23 @@ const Users = () => {
                 modalId = "addUserModal"
                 textPosition= "text-center row justify-content-start"
                 title = "Ajouter un utilisateur"
-                margin = "mt-5"
+                margin = "mt-5 ms-4_5"
                 action = "http://localhost:3000/users/"
                 method = "POST"
-                fields = {userFields}
-                /*id1 = "userName" type1 = "text" value1 = "" label1 = "Nom"
-                id2 = "email" type2 = "email" value2 = "" label2 = "Email"
-                id3 = "password" type3 = "password" value3 = "" label3 = "Mot de passe"
-                id4 = "" type4 = "" value4 = "" label4 = ""
-                id5 = "" type5 = "" value5 = "" label5 = ""*/
-                disabledInput = {false}                
+                fields = {userFields}                         
+                noDisplay = "d-none"              
             />
-            <div className='container'>
-                <div className='row'>
+            <div className='container-fluid mx-0 text-center'>
+                <div className='row justify-content-evenly'>
                     {users.map((user) => (                    
-                        <div className='col-6' key={user.userName}>
+                        <div className='col-5' key={user.userName}>
                             <DisplayCard 
                             col1="col-6"
                             icon1={userIcon} iconAlt1="user_icon" text1={user.userName} 
                             icon2={emailIcon} iconAlt2="email_icon" text2={user.email}
-                            icon3="" iconAlt3="" text3="" icon4="" iconAlt4="" text4=""
-                            text5="" display="d-none" rowDisplay="d-none"
                             />
-                        </div>                        
+                        </div>
+                                                
                     ))}
                 </div>  
                 

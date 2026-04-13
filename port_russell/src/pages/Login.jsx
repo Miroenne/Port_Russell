@@ -51,7 +51,7 @@ const Login = () => {
                         <button type="submit" class="btn btn-primary mb-3">Connexion</button>
                     </div>
                     <div class="container pt-3 text-end">
-                        <NavLink id='readme' to='Readme'>Docs</NavLink>
+                        <NavLink id='readme' to='Readme' target='_blank' rel="noopener noreferrer">Docs</NavLink>
                     </div>
                 </form>
                 

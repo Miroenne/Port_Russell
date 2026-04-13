@@ -15,16 +15,15 @@ const Home = () => {
             try{
                 const resReservations = await fetch('http://localhost:3000/catways/');
                 const catways = await resReservations.json();
-
-                const reservationPromises = catways.map(catway => 
-                    fetch(`http://localhost:3000/catways/${catway.catwayNumber}/reservations/`)
-                    .then(res => res.json())
-                );
-
-                const results = await Promise.all(reservationPromises);
-                const flatReservations = results.flat();
-
-                setAllReservations(flatReservations);                
+                
+                for (let i = 0; i < catways.length; i++){
+                    const catway = catways[i];
+                    const resReservations = await fetch(`http://localhost:3000/catways/${catway.catwayNumber}/reservations/`);
+                    const reservations = await resReservations.json();                    
+                    const flatReservations = reservations.flat();                    
+                    setAllReservations(flatReservations);                    
+                }     
+            
             }catch(error){
                 console.error('error_during_group_load', error);
             }
