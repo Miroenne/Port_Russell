@@ -41,6 +41,11 @@ const Modal = (props) => {
 
             if(response.status === 200 || response.status === 201){                
                 navigate('/Confirm', {state: {method : props.method, origin: location.pathname}});               
+            }else if(response.status >= 400 && response.status < 500){
+                const errorData = await response.json();
+                console.log(errorData.previousStart, errorData.previousEnd, errorData.newStart, errorData.newEnd);
+                console.error('Validation error:', errorData);
+                alert('Erreur de validation: ' + (errorData.message || 'Données invalides'));
             }
         }catch(error){
             console.error('error_during_form_submission', error);

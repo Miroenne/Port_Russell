@@ -64,7 +64,7 @@ const Confirm = () => {
 
     setTimeout(() => {        
             navigate(`/${returnOrigin}`);
-        }, 3000);
+        }, 2000);
 
     return(
         <div>

@@ -80,10 +80,8 @@ const Reservations = (props) => {
                             icon1={catwayIcon} iconAlt1="user_icon" text1={reservation.catwayNumber} 
                             icon2={userIcon} iconAlt2="email_icon" text2={reservation.clientName}
                             icon3={boatIcon} iconAlt3="boat_icon" text3={reservation.boatName} 
-                            icon4={calendarIcon} iconAlt4="calendar_icon" text4={reservation.startDate ? new Date(reservation.startDate).toISOString().slice(0, 10) : ''}
-                            text5={reservation.endDate ? new Date(reservation.endDate).toISOString().slice(0, 10) : ''} display="cardIcon col-4" rowDisplay="row justify-content-evenly pt-2 border-top-3 " secondRowIcon="cardIcon"
-                            displayText4={reservation.startDate ? new Date(reservation.startDate).toLocaleDateString() : ''}
-                            displayText5={reservation.endDate ? new Date(reservation.endDate).toLocaleDateString() : ''}
+                            icon4={calendarIcon} iconAlt4="calendar_icon" text4={new Date(reservation.startDate).toISOString().split('T')[0]}
+                            text5={new Date(reservation.endDate).toISOString().split('T')[0]} display="cardIcon col-4" rowDisplay="row justify-content-evenly pt-2 border-top-3 " secondRowIcon="cardIcon"
                             />
                         </div>
                                                 
