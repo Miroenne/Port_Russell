@@ -69,7 +69,7 @@ const DisplayCard = (props) => {
                     </div>                    
                     <div className={props.col1}>
                         <img src={props.icon2} className='cardIcon mb-2' alt={props.iconAlt2} />
-                        <p className="card-text">{props.text2}</p>
+                        <p className={"card-text" + props.capitalize}>{props.text2}</p>
                     </div> 
                     {/*définir les classes "col et mb-2" dans "props.display" si élément affiché*/}
                     <div className={props.display}> 

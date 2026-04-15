@@ -10,7 +10,7 @@ exports.create = async (req, res) => {
         const existingUser = await User.findOne({email : req.body.email});
 
         if(existingUser){
-            return res.status(409).json({message : 'email_already_exists'});
+            return res.status(409).json({message : "Cet email est déjà utilisé"});
         }
     }catch(error){
         console.error("Erreur lors de la vérification de l'existence de l'utilisateur: ", error);
@@ -71,6 +71,20 @@ exports.getOne = async (req, res, next) => {
 }
 
 exports.update = async (req, res, next) => {
+
+    try{
+        const existingUser = await User.findOne({email : req.body.email});
+
+        if(existingUser){
+            return res.status(409).json({message : "Cet email est déjà utilisé"});
+        }
+    }catch(error){
+        console.error("Erreur lors de la vérification de l'existence de l'utilisateur: ", error);
+        return res.status(500).json({
+            message : 'Erreur lors de la vérification de l\'existence de l\'utilisateur'
+        });
+    }  
+
     const email = req.params.email;
     const temp = ({
         userName : req.body.userName,

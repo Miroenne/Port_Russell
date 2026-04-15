@@ -106,16 +106,6 @@ exports.update = async (req, res, next) => {
     const nextStartDate = req.body.startDate ? new Date(req.body.startDate) : reservation.startDate;
     const nextEndDate = req.body.endDate ? new Date(req.body.endDate) : reservation.endDate;
 
-    /*const temp ={};
-       ['catwayNumber', 'clientName', 'boatName', 'startDate', 'endDate'].forEach(key => {
-        if(req.body[key] !== undefined && req.body[key] !== ''){
-            temp[key] = req.body[key];
-        }
-    });
-
-    const startDate = new Date(temp.startDate);
-    const endDate = new Date(temp.endDate);*/
-
     if (Number.isNaN(nextStartDate.getTime()) || Number.isNaN(nextEndDate.getTime())) {
         return res.status(400).json({ message: 'Format de date invalide' });
     }

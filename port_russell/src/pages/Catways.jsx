@@ -5,7 +5,6 @@ import {useEffect, useState} from 'react';
 import DisplayCard from '../components/DisplayCard';
 import Modal from '../components/Modal';
 
-
 const Catways = () => {
 
     const [catways, setCatways] = useState([]);    
@@ -47,7 +46,7 @@ const Catways = () => {
         
     ];
         
-
+    
 
     return(
         <main>
@@ -70,7 +69,7 @@ const Catways = () => {
                             icon1={catwayIcon} iconAlt1="user_icon" text1={catway.catwayNumber} 
                             icon2={typeIcon} iconAlt2="type_icon" text2={catway.catwayType}
                             icon3={stateIcon} iconAlt3="state_icon" text3={catway.catwayState}
-                            rowDisplay='d-none' display='mt-3'
+                            rowDisplay='d-none' display='mt-3' capitalize=' text-capitalize'
                             />
                         </div>
                                                 

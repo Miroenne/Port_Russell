@@ -1,6 +1,20 @@
 const Catway = require('../models/catway');
 
 exports.create = async (req, res) => {
+
+    try{
+        const existingCatway = await Catway.findOne({catwayNumber : req.body.catwayNumber});
+
+        if(existingCatway){
+            return res.status(409).json({message : "Ce numéro de catway est déjà utilisé"});
+        }
+    }catch(error){
+        console.error("Erreur lors de la vérification de l'existence du catway: ", error);
+        return res.status(500).json({
+            message : 'Erreur lors de la vérification de l\'existence du catway'
+        });
+    } 
+
     const tempCatway =({
         catwayNumber : req.body.catwayNumber,
         catwayType : req.body.catwayType,
@@ -49,6 +63,7 @@ exports.getOne = async (req, res, next) => {
 }
 
 exports.update = async (req, res, next) => {
+
     const id = req.params.id;
     const tempState = req.body.catwayState;
 
