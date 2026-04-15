@@ -24,7 +24,7 @@ const Login = () => {
         e.preventDefault();
 
         // Communication with the authentication endpoint
-        const response = await fetch('http://localhost:3000/users/login',{
+        const response = await fetch('http://localhost:3000/Users/login',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             // 'include' ensures that HTTP-only cookies (like JWT) are handled correctly
@@ -44,7 +44,7 @@ const Login = () => {
             sessionStorage.setItem('user', JSON.stringify(data.user));
 
             // Redirect user to the dashboard
-            navigate('/Home');
+            navigate('/home');
         }else{
             // Basic UI feedback for failed authentication
             alert('Identifiant ou mot de passe incorrect');
@@ -63,7 +63,7 @@ const Login = () => {
             {/* Login Form Section */}
             <div class="container px-0 text-center">
                 <form class="w-50 min-vh-50 shadow-lg border border-3 rounded-3 shadow align-content-center mx-auto"
-                   onSubmit={handleLogin} action="http://localhost:3000/users/login" method="POST" enctype="application/x-www-form-urlencoded">
+                   onSubmit={handleLogin} action="http://localhost:3000/Users/login" method="POST" enctype="application/x-www-form-urlencoded">
 
                     {/* Email Input */}
                     <div class="col-6 mx-auto">
