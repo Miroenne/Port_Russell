@@ -4,31 +4,48 @@ import {useEffect, useState} from 'react';
 import DisplayCard from '../components/DisplayCard';
 import Modal from '../components/Modal';
 
-
+/**
+ * Users Component
+ * Manages the administrative view for all registered users.
+ * Features: Data fetching, custom sorting, and user creation.
+ */
 const Users = () => {
 
+    // State to hold the list of users retrieved from the API
     const [users, setUsers] = useState([]);    
 
+    /**
+     * Side Effect: Data Fetching
+     * Triggers on mount to load the user list from the backend.
+     */
     useEffect(() => {
         const fetchUsers = async () => {
             try{
                 const resUsers = await fetch('http://localhost:3000/users/', {
+                    // Send HTTP-only cookies (JWT) for authorized access
                     credentials: 'include',
+                    // Bypass browser cache to ensure real-time data
                     cache: 'no-store'
                 });
                 const data = await resUsers.json();
                 
-                    if(Array.isArray(data)) {
-                        const sortedData = [...data].sort((a,b) => {
-                            if(a.email.includes('@portrussell.com')) return -1;
-                            if(b.email.includes('@portrussell.com')) return 1;
-                            return 0;
-                        });
-                        setUsers(sortedData);                                                                  
-                    }else{
-                        console.error("La route /users n'a pas renvoyé un tableau", data);
-                        setUsers([]);
-                    }
+                // Ensure data is an array before processing
+                if(Array.isArray(data)) {
+                    /**
+                     * Custom Sorting Logic
+                     * Prioritizes official '@portrussell.com' emails to appear 
+                     * at the top of the list.
+                     */
+                    const sortedData = [...data].sort((a,b) => {
+                        if(a.email.includes('@portrussell.com')) return -1;
+                        if(b.email.includes('@portrussell.com')) return 1;
+                        return 0;
+                    });
+                    setUsers(sortedData);                                                                  
+                }else{
+                    console.error("La route /users n'a pas renvoyé un tableau", data);
+                    setUsers([]);
+                }
 
             }catch(error){
                 console.error('error_during_users_load');
@@ -39,6 +56,9 @@ const Users = () => {
         fetchUsers();
     }, []);
 
+    /**
+     * Dynamic form configuration for adding a new user.
+     */
     const userFields = [
         { name: 'userName', label: 'Nom', type: 'text'},
         { name: 'email', label: 'Email', type: 'email' },
@@ -50,6 +70,7 @@ const Users = () => {
 
     return(
         <main>
+            {/* Modal for User Creation (POST method) */}
             <Modal 
                 modalId = "addUserModal"
                 textPosition= "text-center row justify-content-start"
@@ -62,6 +83,7 @@ const Users = () => {
             />
             <div className='container-fluid mx-0 text-center'>
                 <div className='row justify-content-evenly'>
+                    {/* Mapping through the user state to generate profile cards */}
                     {users.map((user) => (                    
                         <div className='col-5' key={user.userName}>
                             <DisplayCard 

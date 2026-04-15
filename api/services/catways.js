@@ -1,8 +1,13 @@
 const Catway = require('../models/catway');
 
+/**
+ * CREATE a new catway
+ * Logic: Checks if the catwayNumber already exists to avoid duplicates (409 Conflict).
+ */
 exports.create = async (req, res) => {
 
     try{
+        // Check if a catway with the same number already exists in the database
         const existingCatway = await Catway.findOne({catwayNumber : req.body.catwayNumber});
 
         if(existingCatway){
@@ -14,7 +19,7 @@ exports.create = async (req, res) => {
             message : 'Erreur lors de la vérification de l\'existence du catway'
         });
     } 
-
+    // Map request body data to a temporary object for creation
     const tempCatway =({
         catwayNumber : req.body.catwayNumber,
         catwayType : req.body.catwayType,
@@ -22,6 +27,7 @@ exports.create = async (req, res) => {
     });
 
     try{
+        // Persistence: save the new catway to the database
         let catway = await Catway.create(tempCatway);
         res.status(200).json(catway);
     }catch(error){
@@ -37,6 +43,11 @@ exports.create = async (req, res) => {
     }
 }
 
+/**
+ * GET ALL catways
+ * Fetches the entire collection of catways from the database.
+ */
+
 exports.getAll = async (req, res, next) => {
     try{
         const catways = await Catway.find();
@@ -45,6 +56,11 @@ exports.getAll = async (req, res, next) => {
         return res.status(501).json(error);
     };
 }
+
+/**
+ * GET ONE specific catway
+ * Search by catwayNumber (provided in params as :id).
+ */
 
 exports.getOne = async (req, res, next) => {
     const id = req.params.id;
@@ -62,15 +78,22 @@ exports.getOne = async (req, res, next) => {
     }
 }
 
+/**
+ * UPDATE a catway
+ * Business Rule: Only the 'catwayState' property can be modified after creation.
+ */
+
 exports.update = async (req, res, next) => {
 
     const id = req.params.id;
-    const tempState = req.body.catwayState;
+    // Extract and trim the new state value from the request body
+    const tempState = req.body.catwayState?.trim();
 
     try{
         let catway = await Catway.findOne({catwayNumber : id});
 
         if(catway){
+            // Règle métier actuelle: seul l'état du catway est modifiable après création.
             if(!! tempState){
                 catway.catwayState = tempState;
             }
@@ -82,6 +105,11 @@ exports.update = async (req, res, next) => {
         res.status(501).json(error);
     }
 }
+
+/**
+ * DELETE a catway
+ * Removes a catway document using its unique catwayNumber.
+ */
 
 exports.delete = async (req, res, next) => {
     const id = req.params.id;

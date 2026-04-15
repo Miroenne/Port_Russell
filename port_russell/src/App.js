@@ -8,33 +8,54 @@ import Confirm from './pages/Confirm';
 import AuthLayout from './pages/AuthLayout';
 import MainLayout from './pages/MainLayout';
 import ProtectedRoute from './pages/ProtectedRoute';
-/*import Services from './pages/Services';
-import Achievements from './pages/Achievements';
-import Mentions from './pages/Mentions';
-import Contact from './pages/Contact';
-import Footer from './components/Footer'*/
 import {Routes, Route} from "react-router-dom"
 
 import './App.css';
 
+/**
+ * Main Application Component
+ * Defines the routing architecture of the application, including public routes,
+ * layout wrappers, and protected access logic.
+ */
 function App() {
 
+  /**
+   * Simple Authentication Check:
+   * Determines if a user is logged in by checking the presence of a 'user' 
+   * object in sessionStorage. The '!!' operator converts the result to a boolean.
+   */
   const isAuthenticated = !!sessionStorage.getItem('user');
 
   return (
     <div className="App">    
            
       <Routes>
+        {/* AUTH LAYOUT GROUP 
+            Contains public or semi-public routes that don't require the main navbar.
+        */}        
         <Route element={<AuthLayout />}>
           <Route path="/" element={<Login/>}/>
           <Route path='/Readme' element={<Readme/>}/>
           <Route path='/Confirm' element={<Confirm/>}/>
         </Route> 
+
+        {/* MAIN LAYOUT GROUP (Authenticated area)
+            Wraps internal pages with a consistent Navigation Bar.
+            Access to these routes is strictly controlled via the ProtectedRoute guard.
+        */}
         <Route element={<MainLayout />}>
-          <Route path='/home' element={ProtectedRoute({ children: <Home />, isAuthenticated })}/>
-          <Route path="/users" element={ProtectedRoute({ children: <Users />, isAuthenticated })}/>
-          <Route path="/reservations" element={ProtectedRoute({ children: <Reservations />, isAuthenticated })}/>
-          <Route path="/catways" element={ProtectedRoute({ children: <Catways />, isAuthenticated })}/>        
+
+          {/* Dashboard route */}
+          <Route path='/home' element={<ProtectedRoute isAuthenticated={isAuthenticated}><Home /></ProtectedRoute>}/>
+
+          {/* User management route */}
+          <Route path="/users" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Users /></ProtectedRoute>}/>
+
+          {/* Reservations management route */}
+          <Route path="/reservations" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Reservations /></ProtectedRoute>}/>
+
+          {/* Catway management route */}
+          <Route path="/catways" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Catways /></ProtectedRoute>}/>      
           
         </Route>       
         

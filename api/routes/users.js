@@ -1,23 +1,40 @@
 const express = require('express');
 const router = express.Router();
 
+// Import the user service to handle business logic related to users.
 const service = require('../services/users');
+// Import the private middleware to protect specific routes with token verification.
 const private = require('../middlewares/private');
 
-/* Authentification of the user */
+/**
+ * AUTHENTIFICATION ROUTES
+ */
+
+
+/* Authentificate the user and generate a token/session */
 router.post('/login', service.login);
-/* Logout with token's verification for security */
+
+/* Terminate the session - Requires a valid token for security */
 router.get('/logout', private.verifyToken, service.logout);
-/* Get all the users from the database */
+
+/**
+ * USER MANAGEMENT ROUTES (CRUD)
+ */
+
+/* Retrieve all users from the database - Protected route */
 router.get('/', private.verifyToken, service.getAll);
-/* Get a specific user from the database with his email */
+
+/* Fetch a specific user from the database with his email address - Protected route */
 router.get('/:email', private.verifyToken, service.getOne);
-/* Create a new user in the database */
+
+/* Register a new user - Public route (No token required for signup) */
 router.post('/', service.create);
-/* Update a user in the database with his email */
+
+/* Update user information based on email - Protected route */
 router.put('/:email', private.verifyToken, service.update);
-/* Delete a user from the database with his email */
+
+/* Remove a user from the database - Protected route */
 router.delete('/:email', private.verifyToken, service.delete);
 
-
+// Export the router to be used in the main app file (app.js) for mounting on the /users path.
 module.exports = router;

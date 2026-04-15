@@ -3,10 +3,15 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const cookie = require('cookie-parser');
 
-
+/**
+ * CREATE a new user
+ * Logic: Checks for email availability before creation to provide a clear conflict error (409).
+ */
 exports.create = async (req, res) => {
 
     try{
+        // Application-level check to verify if the email is already registered
+        // (In addition to the MongoDB unique constraint).
         const existingUser = await User.findOne({email : req.body.email});
 
         if(existingUser){
@@ -19,16 +24,16 @@ exports.create = async (req, res) => {
         });
     }    
 
-
-
+    // Prepare user data from request body
     const tempUser = ({
         userName        : req.body.userName,
-        email           : req.body.email,
+        email           : req.body.email?.toLowerCase().trim(), // Normalize email to lowercase and trim whitespace
         password        : req.body.password,
         accessLevel     : req.body.accessLevel
     }); 
 
     try{
+        // Persist new user to the database
         let user = await User.create(tempUser);
         res.status(200).json(user);
     }catch(error){
@@ -44,9 +49,14 @@ exports.create = async (req, res) => {
     }
 }
 
+/**
+ * GET ALL users
+ * Fetches all users while excluding the password field for security.
+ */
 exports.getAll = async (req, res, next) => {
     try
     {
+        // Use projection to hide sensitive password data
         const users = await User.find().select('-password');
         return res.status(200).json(users);
     }catch(error){
@@ -54,6 +64,10 @@ exports.getAll = async (req, res, next) => {
     }
 }
 
+/**
+ * GET ONE specific user
+ * Search by email address provided in params.
+ */
 exports.getOne = async (req, res, next) => {
     const email = req.params.email;
 
@@ -70,9 +84,14 @@ exports.getOne = async (req, res, next) => {
     }
 }
 
+/**
+ * UPDATE user information
+ * Logic: Includes email availability check and partial update implementation.
+ */
 exports.update = async (req, res, next) => {
 
     try{
+        // If the email is being changed, ensure the new value is not already taken by another user.
         const existingUser = await User.findOne({email : req.body.email});
 
         if(existingUser){
@@ -96,12 +115,20 @@ exports.update = async (req, res, next) => {
         let user = await User.findOne({email : email});
 
         if (user){
-            Object.keys(temp).forEach(key => {
-                if (!! temp[key]) {
-                    user[key] = temp[key];
-                }
-            });
-            await user.save();
+
+            // Sanitize inputs: use provided data or fallback to existing values
+            const nextUserName = req.body.userName?.trim() || user.userName;
+            const nextEmail = req.body.email?.trim() || user.email;
+            
+            // Password update: if a new password is provided, it will be hashed by the model's pre-save hook.
+            if (req.body.password) {
+                user.password = req.body.password; // Model hook will handle hashing
+            }
+
+            user.userName = nextUserName;
+            user.email = nextEmail;
+            
+            await user.save(); // Model hook will handle password re-hashing if changed.
 
             return res.status(201).json(user);
         }
@@ -111,6 +138,10 @@ exports.update = async (req, res, next) => {
     }
 }
 
+/**
+ * DELETE user
+ * Removes user based on their unique email address.
+ */
 exports.delete = async (req, res, next) => {
     const email = req.params.email;
 
@@ -122,22 +153,30 @@ exports.delete = async (req, res, next) => {
     }
 }
 
+/**
+ * USER LOGIN
+ * Logic: Verifies credentials, generates a JWT, and sets an HTTP-only cookie.
+ */
 exports.login = async (req, res, next) => {
     const {email, password} = req.body;
 
     try {
+        // Fetch user while excluding metadata fields
         const user = await User.findOne({email : email}, '-__V -createAt -updateAt');
 
         if(user){
+            // Compare the provided plain-text password with the stored hash
             bcrypt.compare(password, user.password, (err, response) => {
 
                 if(err){
                     throw new Error(err);
                 }
                 if (response){
+                    // Remove password from the object before signing the token or sending the response
                     delete user._doc.password;
 
                     const expireIn = 60*60*24;
+                    // Generate JWT containing minimal user info as proof of identity for private routes.
                     const token = jwt.sign({
                         user : user
                     },
@@ -146,6 +185,7 @@ exports.login = async (req, res, next) => {
                         expiresIn : expireIn
                     });
 
+                    // Set token in an HTTP-only cookie to mitigate XSS (Cross-Site Scripting) risks.
                     res.cookie('token', token,
                     {
                         httpOnly : true,
@@ -173,6 +213,10 @@ exports.login = async (req, res, next) => {
     }
 }
 
+/**
+ * USER LOGOUT
+ * Logic: Clears the authentication token cookie.
+ */
 exports.logout = async (req, res) => {
     res.clearCookie('token', {
         httpOnly : true,

@@ -3,14 +3,29 @@ import '../style/style.css';
 import {useEffect, useState} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 
+/**
+ * Modal Component
+ * A versatile component used for both creating and editing resources.
+ * It handles dynamic form generation and contextual delete operations.
+ */
 const Modal = (props) => {
 
+    // Local state to manage form inputs. 
+    // Synchronized with initialValues for edit modes.
     const [formData, setFormData] = useState(props.initialValues || {});
 
+    /**
+     * Effect hook to refresh form data whenever the modal opens 
+     * or when the targeted resource changes.
+     */
     useEffect(() => {
         setFormData(props.initialValues || {});
     }, [props.initialValues, props.modalId]);
 
+    /**
+     * Updates local state on input change.
+     * Uses computed property names to handle multiple inputs dynamically.
+     */
     const handleChange = (e) => {
         const {name, value} = e.target;
 
@@ -23,19 +38,24 @@ const Modal = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
     
+    /**
+     * Handles form submission for CREATE (POST) and UPDATE (PUT) operations.
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // The action can be a static URL string or a dynamic factory function.
         var actionUrl = 
         typeof props.action === 'function' ? props.action(formData) : props.action;
 
         try{
             const response = await fetch(actionUrl, {
                 method: props.method,
-                credentials: 'include',
+                credentials: 'include', // Ensures cookies (JWT) are sent with the request
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
+                // Backend expects x-www-form-urlencoded format.
                 body: new URLSearchParams(formData)
             });
 
@@ -55,8 +75,13 @@ const Modal = (props) => {
     const storedUser = sessionStorage.getItem('user');    
     const user = storedUser ? JSON.parse(storedUser) : null;
 
+    /**
+     * Handles contextual resource deletion.
+     * Determines the API endpoint based on the current URL path.
+     */
     const handleDelete = async () => {
 
+        // Logic for USER deletion
         if(location.pathname.toLowerCase().includes('users')){
             if(window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")){
                 try{
@@ -66,6 +91,7 @@ const Modal = (props) => {
                     });
 
                     if(response.status === 204){
+                        // Special case: if a user deletes their own account, clear session and logout.
                         if(user && user.email === props.user){
                             sessionStorage.removeItem('user');
                             navigate('/');
@@ -81,6 +107,7 @@ const Modal = (props) => {
                 }
             }
         }
+        // Logic for RESERVATION deletion
         else if(location.pathname.toLocaleLowerCase().includes('reservations')){
             if(window.confirm("Êtes-vous sûr de vouloir supprimer cette réservation ?")){
                 try{
@@ -101,6 +128,7 @@ const Modal = (props) => {
                 }
             }            
         }
+        // Logic for CATWAY deletion
         else if(location.pathname.toLocaleLowerCase().includes('catways')){
             if(window.confirm("Êtes-vous sûr de vouloir supprimer ce catway ?")){
                 try{
@@ -130,7 +158,7 @@ const Modal = (props) => {
 
     return(
         <div>
-            {/*Button trigger modal */}
+            {/* Action buttons to trigger the Modal or the Delete process */}
             <div className={props.textPosition}>
                 <button type="button" className={"btn btn-success w-auto col-6 " + props.margin} data-bs-toggle="modal" data-bs-target={"#" + props.modalId}>
                    {props.title}
@@ -141,7 +169,7 @@ const Modal = (props) => {
             </div>
 
 
-            {/* Modal */}
+            {/* Bootstrap Modal Structure */}
             <div className="fade modal " id={props.modalId} name='myModal' tabIndex="-1" aria-labelledby={props.modalId + "Label"} aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
@@ -150,6 +178,7 @@ const Modal = (props) => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
+                            {/* Dynamic form generation based on the fields array prop */}
                             <form className='' onSubmit={handleSubmit}>     
                                 <div className='container'>                                                                            
                                         {props.fields?.map((field) =>                                     
