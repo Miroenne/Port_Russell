@@ -12,6 +12,7 @@ const DisplayCard = (props) => {
     var modalId = "";
     var fields = [];
     var pathname = "";
+    var updateId = null;
    
     useEffect(() => {
     if(location.pathname.toLowerCase().includes('reservations')){
@@ -32,7 +33,7 @@ const DisplayCard = (props) => {
     }else if(location.pathname.toLowerCase().includes(`reservations`)){
         modalId = `editReservationModal-${props.idReservation}`;
         pathname = "http://localhost:3000/catways/" + props.text1 + "/reservations/" + props.idReservation;
-
+        
         fields = [
             { name: 'catwayNumber', label: 'Numéro de catway', type: 'text', value: props.text1 },
             { name: 'clientName', label: 'Nom du client', type: 'text', value: props.text2 },
@@ -44,7 +45,7 @@ const DisplayCard = (props) => {
     }else if(location.pathname.toLowerCase().includes('catways')){
         modalId = `editCatwayModal-${props.text1}`;
         pathname = "http://localhost:3000/catways/" + props.text1;
-
+        
         fields = [
             { name: 'catwayNumber', label: 'Numéro de catway', type: 'text', value: props.text1, disabledInput: "disabled" },
             { name: 'catwayType', label: 'Type de catway', type: 'text', value: props.text2, disabledInput: "disabled" },
@@ -98,7 +99,7 @@ const DisplayCard = (props) => {
                     action = {pathname}
                     method = "PUT"
                     fields = {fields}
-                    noDisplay = "" 
+                    noDisplay = ""                     
                     user = {props.text2}
                     idReservation = {props.idReservation}
                     catwayNumber = {props.text1}

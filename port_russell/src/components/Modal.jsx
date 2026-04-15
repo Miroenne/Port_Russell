@@ -26,7 +26,7 @@ const Modal = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const actionUrl = 
+        var actionUrl = 
         typeof props.action === 'function' ? props.action(formData) : props.action;
 
         try{
@@ -151,7 +151,7 @@ const Modal = (props) => {
                         </div>
                         <div className="modal-body">
                             <form className='' onSubmit={handleSubmit}>     
-                                <div className='container'>                                    
+                                <div className='container'>                                                                            
                                         {props.fields?.map((field) =>                                     
                                         <div className='mb-3 text-start' key={field.name}>
                                             <label className='form-label' htmlFor={field.name}>{field.label}</label>

@@ -5,6 +5,22 @@ const cookie = require('cookie-parser');
 
 
 exports.create = async (req, res) => {
+
+    try{
+        const existingUser = await User.findOne({email : req.body.email});
+
+        if(existingUser){
+            return res.status(409).json({message : 'email_already_exists'});
+        }
+    }catch(error){
+        console.error("Erreur lors de la vérification de l'existence de l'utilisateur: ", error);
+        return res.status(500).json({
+            message : 'Erreur lors de la vérification de l\'existence de l\'utilisateur'
+        });
+    }    
+
+
+
     const tempUser = ({
         userName        : req.body.userName,
         email           : req.body.email,
@@ -58,6 +74,7 @@ exports.update = async (req, res, next) => {
     const email = req.params.email;
     const temp = ({
         userName : req.body.userName,
+        email : req.body.email,
         password : req.body.password
     });
 
