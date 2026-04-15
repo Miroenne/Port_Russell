@@ -1,8 +1,8 @@
 import '../style/bootstrap.min.css';
 import '../style/style.css';
 import Modal from './Modal';
-import { data, useLocation } from 'react-router-dom';
-import {useState, useEffect, use} from 'react';
+import { useLocation } from 'react-router-dom';
+import {useState, useEffect} from 'react';
 
 
 const DisplayCard = (props) => {   
@@ -41,6 +41,19 @@ const DisplayCard = (props) => {
             { name: 'endDate', label: 'Fin de réservation', type: 'date', value: props.text5 }
         ];
         console.log(pathname);
+    }else if(location.pathname.toLowerCase().includes('catways')){
+        modalId = `editCatwayModal-${props.text1}`;
+        pathname = "http://localhost:3000/catways/" + props.text1;
+
+        fields = [
+            { name: 'catwayNumber', label: 'Numéro de catway', type: 'text', value: props.text1, disabledInput: "disabled" },
+            { name: 'catwayType', label: 'Type de catway', type: 'text', value: props.text2, disabledInput: "disabled" },
+            { name: 'catwayState', label: 'Etat du catway', type: 'text', value: props.text3 }
+        ];
+    }else{
+        console.error('Unknown path for DisplayCard:', location.pathname);
+
+        fields = [];
     };
     
     
@@ -49,7 +62,7 @@ const DisplayCard = (props) => {
        <div className="card shadow-lg min-h-200 mx-auto border-2 mt-5" id='userCard'>            
             <div className="card-body text-center">
                 <div className="row">
-                    <div className={props.col1}>
+                    <div className={props.col1}>                        
                         <img src={props.icon1} className='cardIcon mb-2' alt={props.iconAlt1}/>
                         <p className="card-title">{props.text1}</p>
                     </div>                    
@@ -59,7 +72,7 @@ const DisplayCard = (props) => {
                     </div> 
                     {/*définir les classes "col et mb-2" dans "props.display" si élément affiché*/}
                     <div className={props.display}> 
-                        <img src={props.icon3} className={props.display} alt={props.iconAlt3} />
+                        <img src={props.icon3} className={'cardIcon mb-2 '} alt={props.iconAlt3} />
                         <p className="card-text">{props.text3}</p>
                     </div>  
                 </div>

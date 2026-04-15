@@ -43,6 +43,7 @@ const Users = () => {
         { name: 'userName', label: 'Nom', type: 'text'},
         { name: 'email', label: 'Email', type: 'email' },
         { name: 'password', label: 'Mot de passe', type: 'password' }
+        
     ];
         
 
@@ -67,6 +68,7 @@ const Users = () => {
                             col1="col-6"
                             icon1={userIcon} iconAlt1="user_icon" text1={user.userName} 
                             icon2={emailIcon} iconAlt2="email_icon" text2={user.email}
+                            rowDisplay='d-none' display='d-none'
                             />
                         </div>
                                                 

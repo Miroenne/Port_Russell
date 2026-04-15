@@ -99,8 +99,28 @@ const Modal = (props) => {
                     console.error('Error occurred while deleting reservation:', error);
 
                 }
-            }
+            }            
         }
+        else if(location.pathname.toLocaleLowerCase().includes('catways')){
+            if(window.confirm("Êtes-vous sûr de vouloir supprimer ce catway ?")){
+                try{
+                    const response = await fetch(`http://localhost:3000/catways/${props.catwayNumber}`, {
+                        method: 'DELETE',
+                        credentials: 'include'
+                    });
+
+                    if(response.status === 204){
+                        console.log('Catway deleted successfully');
+                        navigate('/Confirm', {state: {method: 'delete', origin: location.pathname}});              
+                    } else {
+                        console.error('Failed to delete catway');
+                    }
+                } catch (error) {
+                    console.error('Error occurred while deleting catway:', error);
+
+                }
+            }
+        }    
 
     }
 
