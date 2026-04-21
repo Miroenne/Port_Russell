@@ -6,13 +6,16 @@ const service = require('../services/users');
 // Import the private middleware to protect specific routes with token verification.
 const private = require('../middlewares/private');
 
+const controls = require('../controllers/users');
+
+
 /**
  * AUTHENTIFICATION ROUTES
  */
 
 
 /* Authentificate the user and generate a token/session */
-router.post('/login', service.login);
+router.post('/login', controls.login);
 
 /* Terminate the session - Requires a valid token for security */
 router.get('/logout', private.verifyToken, service.logout);

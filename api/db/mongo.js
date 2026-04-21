@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const clientOptions = {
     dbName: 'Port_Russell'
 };
-
+console.log(process.env.DB_URL);
 // Initialize and export an async connection.
 exports.initClientDbConnection = async () => {
   try {

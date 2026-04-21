@@ -2,6 +2,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const cookie = require('cookie-parser');
+const login = require('../controllers/users');
 
 /**
  * CREATE a new user
@@ -157,7 +158,7 @@ exports.delete = async (req, res, next) => {
  * USER LOGIN
  * Logic: Verifies credentials, generates a JWT, and sets an HTTP-only cookie.
  */
-exports.login = async (req, res, next) => {
+/* exports.login = async (req, res, next) => {
     const {email, password} = req.body;
 
     try {
@@ -203,6 +204,65 @@ exports.login = async (req, res, next) => {
                     });
                 }
                 
+                return res.status(403).json('wrong_credentials');
+            });
+        }else{
+            return res.status(404).json({ message : 'utilisateur non trouvé'});
+        }
+    }catch(error){
+        return res.status(500).json(error);
+    }
+} */ 
+
+exports.login = async (email, password, res) => {
+    
+
+    try {
+        // Fetch user while excluding metadata fields
+        const user = await User.findOne({email : email}, '-__V -createAt -updateAt');
+
+        if(user){
+            // Compare the provided plain-text password with the stored hash
+            bcrypt.compare(password, user.password, (err, response) => {
+
+                if(err){
+                    throw new Error(err);
+                }
+                if (response){
+                    // Remove password from the object before signing the token or sending the response
+                    delete user._doc.password;
+
+                    const expireIn = 60*60*24;
+                    // Generate JWT containing minimal user info as proof of identity for private routes.
+                    const token = jwt.sign({
+                        user : user
+                    },
+                    process.env.SECRET_KEY,
+                    {
+                        expiresIn : expireIn
+                    });
+
+                    // Set token in an HTTP-only cookie to mitigate XSS (Cross-Site Scripting) risks.
+                                        
+
+                    console.log('User logged successfully');
+
+                    return{
+                        message: 'authenticate_succeed',                        
+                        token: cookie('token', token,
+                    {
+                        httpOnly : true,
+                        sameSite : 'strict'
+                    }),
+                        user: {
+                            userName: user.userName,
+                            email: user.email
+                        }
+                    }
+
+                    console.log(token);
+                    console.log(user);
+                }
                 return res.status(403).json('wrong_credentials');
             });
         }else{
